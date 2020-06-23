@@ -2,6 +2,7 @@
 title: Namaste World
 date: "2020-06-18"
 description: "The first post on nslpad"
+tags: []
 ---
 
 I was supposed to write and publish in this blog a long time ago. I created this to have a place where I share my learning notes and also document my journey. But, as I kept on learning, I found it pretty hard to sit still and write down. I got lazy to write. But not anymore. This is the first post and there will be many more to follow.
