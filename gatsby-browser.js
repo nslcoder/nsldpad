@@ -2,4 +2,4 @@
 import "typeface-montserrat"
 import "typeface-merriweather"
 
-import "prismjs/themes/prism-a11y-dark.css"
+import "prismjs/themes/prism-dark.css"
