@@ -1,7 +1,7 @@
 ---
 title: Building a Basic CRUD API in Node, Express and MongoDB with Mongoose  
 date: "2020-12-15"  
-description: "Check outhow a simple RESTful CRUD API is built using Node, Express and MongoDB with Mongoose"  
+description: "Check out how a simple RESTful CRUD API is built using Node, Express and MongoDB with Mongoose"  
 tags: ["Node.js", "Express", "MongoDB", "Mongoose", "API", "REST"]
 ---
 
