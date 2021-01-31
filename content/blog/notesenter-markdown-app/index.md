@@ -4,7 +4,7 @@ date: "2021-01-31"
 description: "Here I lay out the things I learned while creating notesenter as well as its challenging parts"  
 tags: ["Node.js", "Express", "Markdown", "MongoDB", "Mongoose", "EJS", "Bootstrap", "Heroku", "DOMPurify", "Marked", "jsdom", "method-override"]
 ---
-[![Full-page view of notesenter](./notesenter-view.jpg)](https://notesenter.herokuapp.com/)
+[![Full-page view of notesenter](notesenter-view.jpg)](https://notesenter.herokuapp.com/)
 
 In my previous post, I detailed how I created a RESTful CRUD API. Taking the learnings I did while building that API, I made [a simple Markdown note-taking app](https://notesenter.herokuapp.com/). The app allows you to create a new note; use Markdown syntax to write, post a link, add an image or do anything Markdown is capable of; and save it. It only has a basic set of functionalities for now, but in the future, I'll add authentication & authorization, increase the limit of notes a user can create, implement pagination and execute other ideas that I might have. 
 
