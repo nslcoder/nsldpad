@@ -13,7 +13,22 @@ In this post, I will show you how you can seed a MongoDB database. It's easy and
 
 Create a project folder and initialize it with `npm init`. You know the drill: either provide your own values or keep on pressing the enter button to use the default values. This is what my `package.json` looks like:
 
-![package.json](C:\Users\User\Desktop\mongodbseeder\package.json content.png)
+```json
+{
+  "name": "mongodbseeder",
+  "version": "1.0.0",
+  "description": "A MongoDB database seeding program",
+  "main": "seeder.js",
+  "scripts": {
+    "seed": "node seeder.js"
+  },
+  "author": "nslcoder",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^6.1.8"
+  }
+}
+```
 
 Now install `mongoose`. This is the only third-party module we need. And, then create the `seeder.js` file.
 
@@ -23,7 +38,34 @@ We will need a schema to define the shape of a MongoDB document and then we will
 
 Create a folder titled `models` and inside it create a file `Person.js`. In the file, add the following code:
 
-![Schema and model](C:\Users\User\Desktop\mongodbseeder\person schema & model.png)
+```javascript
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const personSchema = new Schema(
+  {
+    first_name: {
+      type: String,
+      required: true,
+    },
+    last_name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('Person', personSchema);
+```
 
 As you can see in the image, the schema has four mandatory fields: first name, last name, email and country. They are all of the `String` type. The `timestamps` option is there to create `createdAt` and `updatedAt` fields for each document. We then create a model using `mongoose.model()` and export it.
 
@@ -33,13 +75,60 @@ We will get our mock data for seeding from this amazing tool called [Mockaroo](h
 
 The image below shows partial JSON data that will go into our database. 
 
-![Mock data](C:\Users\User\Desktop\mongodbseeder\mock data json.png)
+```json
+[
+  {
+    "first_name": "Dionis",
+    "last_name": "Cloy",
+    "email": "dcloy0@csmonitor.com",
+    "country": "Indonesia"
+  },
+  {
+    "first_name": "Flemming",
+    "last_name": "Bills",
+    "email": "fbills1@jiathis.com",
+    "country": "Philippines"
+  },
+  {
+    "first_name": "Brendin",
+    "last_name": "Jahnke",
+    "email": "bjahnke2@oracle.com",
+    "country": "Czech Republic"
+  }
+]
+```
 
 ## Seeder
 
 Finally, we will work on `seeder.js`, the main file of our little program. Ensure your file has the following code.
 
-![seeder.js](C:\Users\User\Desktop\mongodbseeder\seeder.png)
+```javascript
+const { readFile } = require('fs/promises');
+const mongoose = require('mongoose');
+const Person = require('./models/person');
+const mockData = require('./MOCK_DATA.json');
+
+const seeder = async () => {
+  // Connect to the local MongoDB database
+  await mongoose.connect('mongodb://127.0.0.1:27017/mockDB');
+  console.log('Database connected');
+
+  // Read the file and store its contents
+  const data = await readFile('MOCK_DATA.json', 'utf-8');
+
+  // Deserialize JSON into JS array
+  const parsedData = JSON.parse(data);
+
+  // Create all the documents in the database at once
+  await Person.create(parsedData);
+
+  console.log('Seeding is completed');
+  process.exit();
+};
+
+// Call the seeder function
+seeder();
+```
 
 In the file, there is an async function named `seeder`. It at first connects to the MongoDB database `mockDB` in your local machine. If the database of the same name already exists, this method simply connects to it. If there is no database of such name, it will create a new one. 
 
@@ -51,5 +140,5 @@ Once the seeding is complete, the `seeder` function will print the message to th
 
 If you check it via MongoDB Compass or mongo shell, you will see the `mockDB` database with a single collection that has 100 documents.
 
- If you want all the code for this, please get it from this [repo](https://github.com/nslcoder/mongodbseeder).
+ If you want all the code, please get it from this [repo](https://github.com/nslcoder/mongodbseeder).
 
