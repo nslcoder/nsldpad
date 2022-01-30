@@ -49,7 +49,7 @@ In the file, I required the necessary modules. To load environment variables int
 
 After creating the routes and the controllers, I came back to the main file, required the `postRoutes` file and then used the `app.use()` to specify the routing functions for the path `/apis`. When the base of the requested route matches `/apis`, `postRoutes` will be executed.
 
-```
+```javascript
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -91,7 +91,7 @@ I created the `models` folder at the project root and inside it added a file nam
 
 We need models too. They are constructors that take a schema and create documents based on it. They also read, update and delete documents in the database. I used the `mongoose.model` method to create a model. The method's first parameter is the model's name which is singular and with the first letter capitalized and its second parameter is the schema. Finally I exported the model to be used in the controllers.
 
-```
+```javascript
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -128,7 +128,7 @@ The final function is called `deletePost`. Inside the function, `Post.findByIdAn
 
 Once I created all the functions, I exported it with `module.exports`.
 
-```
+```javascript
 const Post = require("../models/post");
 
 // Create a new post
@@ -203,7 +203,7 @@ I created the `routes` folder with a file named `postroutes.js`. In the file, I 
 
 I set up routes using the `router` object and HTTP verbs. `POST` is for creating a document. `GET` is for getting one or all documents. `PUT` is for updating a document. And, `DELETE` is for deleting a document. I've used the `id`route parameter whose value is supplied from the `_id` field of the documents in the database. `router` needs to be exported and `module.exports` does the job.
 
-```
+```javascript
 const express = require("express");
 const router = express.Router();
 

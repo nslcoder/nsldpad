@@ -36,7 +36,7 @@ Now install `mongoose`. This is the only third-party module we need. And, then c
 
 We will need a schema to define the shape of a MongoDB document and then we will create a model from the schema.
 
-Create a folder titled `models` and inside it create a file `Person.js`. In the file, add the following code:
+Create a folder titled `models` and inside it create a file `person.js`. In the file, add the following code:
 
 ```javascript
 const mongoose = require('mongoose');

@@ -27,13 +27,13 @@ Unlike in my previous post, I won't explain everything I did to build this app. 
 ### Views
 Views are the visual part of the app. To create the frontend, I used EJS (Embedded JavaScript) templates with Bootstrap. All the files with `.ejs` extension go into the views folder. In the main file (i.e. `app.js`), I added the following line and started working on the `.ejs` files:
 
-```
+```javascript
 app.set("view engine", "ejs");
 ```
 
 In the head of all the `.ejs` files, I added the following line to use Bootstrap:
 
-```
+```ejs
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 ```
 
@@ -47,7 +47,7 @@ MongoDB Atlas is a cloud database service. It has a free tier that offers 512MB 
 
 In the main file, I used Mongoose to make the connection between the app and the database:
 
-```
+```javascript
 const dbURL = process.env.MONGODB_URL;
 
 mongoose.connect(dbURL, {
@@ -69,7 +69,7 @@ I used Marked to parse Markdown and convert it into HTML, and then DOMPurify (wi
 
 In the `Note.js` file inside the `models` directory, I added the following: 
 
-```
+```javascript
 const marked = require("marked");
 const createDOMPurify = require("dompurify");
 const { JSDOM } = require("jsdom");
@@ -80,7 +80,7 @@ const DOMPurify = createDOMPurify(window);
 
 In the schema, there is a field `sanitizedHTML` which holds sanitized HTML strings converted from Markdown. 
 
-```
+```javascript
 sanitizedHTML: {
 	type: String,
 	required: true
@@ -90,7 +90,7 @@ sanitizedHTML: {
 ### Pre Hook Validation
 I used the piece of code shown below to validate the document. It takes `description` of the document (here `this` refers to the document). `marked()` turns the Markdown description string into HTML. `DOMPurify.sanitize()` sanitizes the output HTML and creates clean HTML which is then stored in the `sanitizedHTML` field. The validation is done every time a new document is created or when the old one is updated. 
 
-```
+```javascript
 NoteSchema.pre("validate", function(next) {
     if(this.description) {
         this.sanitizedHTML = DOMPurify.sanitize(marked(this.description));
@@ -103,7 +103,7 @@ NoteSchema.pre("validate", function(next) {
 ### Work Around Pre Hooks for Updates
 Pre hooks aren't available for any of the update methods such as `update()`, `findByIdAndUpdate()`, etc. They are executed when creating new documents but when old docs are changed using any update method, they don't get executed. So, the trick is to find a document by its id, assign the altered fields to the old fields and save the doc with `save()`. This way pre hook validation gets executed and our app will show the updated note. 
 
-```
+```javascript
 const updateNote = async (req, res) => {
     try {
         const note = await Note.findById(req.params.id);
@@ -124,15 +124,15 @@ HTML forms only support two HTTP methods: GET and POST. If we have to put or del
 
 In the `app.js` file, I added these lines:
 
-```
+```javascript
 const methodOverride = require("method-override");
 
 app.use(methodOverride("_method"));
-``` 
+```
 
 The app needs delete method in the `index.ejs` file only. So, I added this there: 
 
-```
+```ejs
 <form action="/notes/<%= note._id %>?_method=DELETE" method="post">
 	<button class="btn btn-outline-danger">Delete</button>
 </form>
@@ -140,7 +140,7 @@ The app needs delete method in the `index.ejs` file only. So, I added this there
 
 And, the app needs put method in the `edit.ejs` file only. So, I added this there:
 
-```
+```ejs
 <form action="/notes/<%= note._id %>?_method=PUT" method="post" class="border p-3 m-2 rounded">
         
 	// Some HTML and Bootstrap classes come here which you can check in the GitHub repo
@@ -161,7 +161,7 @@ I was worried that someone with malicious intentions could make numerous notes o
 
 In the `controllers.js` file, I added this line which checks the number of notes in the database before  a note is created. If there are already 5 notes, the app will show a database-limit-reached message instead of creating another note. 
 
-```
+```javascript
 if(noteCount.length > 4) return res.render("new", { info: "d-block" });
 ```
 
